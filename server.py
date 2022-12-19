@@ -72,7 +72,6 @@ class Server:
             await self.send_history(address)
         user = self.logins[user_login]
         while is_logged_in:
-            # await self.send_message(Message(text='Enter message: '), address)
             message = await self.read_message(reader)
             if not message:
                 break
@@ -92,7 +91,7 @@ class Server:
                                             address)
                     continue
                 if user.count < ServerSettings.MAX_MESSAGE_COUNT:
-                    await self.send_public_message(message, address)
+                    await self.send_public_message(message)
                 else:
                     await self.send_message(
                         Message(text='You have reached the limit of messages'),
@@ -155,12 +154,11 @@ class Server:
         for message in self.history:
             await self.send_message(message, address)
 
-    async def send_public_message(self, message: str, address: tuple) -> None:
+    async def send_public_message(self, message: str) -> None:
         """
         Send message to all clients.
         """
         for user_address, writer in self.users.items():
-            # if user_address != address:
             writer.write(message.encode())
             await writer.drain()
 
