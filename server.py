@@ -72,7 +72,7 @@ class Server:
             await self.send_history(address)
         user = self.logins[user_login]
         while is_logged_in:
-            await self.send_message(Message(text='Enter message: '), address)
+            # await self.send_message(Message(text='Enter message: '), address)
             message = await self.read_message(reader)
             if not message:
                 break
@@ -193,7 +193,8 @@ class Server:
         if not message.is_active:
             return
         writer = self.users.get(address)
-        writer.write(message.text.encode())
+        text = f'\n{message.text}'
+        writer.write(text.encode())
         await writer.drain()
 
 

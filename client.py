@@ -1,5 +1,5 @@
 import asyncio
-
+from aioconsole import ainput
 from utils import ServerSettings
 
 
@@ -20,17 +20,17 @@ class Client:
     async def send_message(self):
         """Send message to server."""
         while True:
-            message = input()
+            message = await ainput('')
             self.writer.write(message.encode())
             await self.writer.drain()
-            await asyncio.sleep(1)
+            await asyncio.sleep(.01)
 
     async def read_message(self):
         """Read message from server."""
         while True:
             if message := await self.reader.read(1024):
                 print(message.decode())
-                await asyncio.sleep(1)
+                await asyncio.sleep(.01)
 
 
 if __name__ == '__main__':
